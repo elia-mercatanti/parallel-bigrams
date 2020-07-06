@@ -1,7 +1,7 @@
 # Parallel Bigrams - Parallel Computing Project
 Project for Parallel Computing course. Sequential and parallel implementations of Bigrams search algorithm in Java. 
 
-More information can be found in the report of the project [Report](https://github.com/elia-mercatanti/parallel-bigrams/blob/master/report/report.pdf).
+More information can be found in the report of the project: [Report](https://github.com/elia-mercatanti/parallel-bigrams/blob/master/report/report.pdf).
 
 ## Installation
 
