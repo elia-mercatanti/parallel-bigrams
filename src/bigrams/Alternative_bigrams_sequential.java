@@ -1,5 +1,5 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
+package bigrams;
+
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -10,63 +10,35 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Bigrams_sequential {
+public class Alternative_bigrams_sequential {	
 	
-	public static void bigrams(LinkedList<String> txtList, HashMap<String, Integer> dict, String regEx) throws IOException {
+	public static void worker(LinkedList<String> txtList, HashMap<String, Integer> dict, String regEx) throws IOException{
 		String txtName = txtList.poll();	
-		FileReader myObj1 = new FileReader("texts/" + txtName);
-		BufferedReader buffer = new BufferedReader(myObj1);
-		String line;
-		String prevToken = "" ;
-		String nextToken = "";
-		Pattern searchToken = Pattern.compile(regEx); 
-		Matcher m = null;
-		String nGram = null;
-			
-		while((line = buffer.readLine())!=null){
-			m = searchToken.matcher(line);
-			if(!m.find()) {
-				continue;
-			}
-			break;
-		}
+		String firstToken = "" ;
+		String nextToken;
+		Pattern p = Pattern.compile(regEx);
+		Matcher m;
+		String nGram;	
 		
-		if(line != null) {
-			m = searchToken.matcher(line);
-			if(m.find()) {
-				prevToken = m.group();
-			}
-			while(m.find()) {
-				nextToken = m.group();
-				nGram = (prevToken + nextToken);
-				dict.merge(nGram, 1, (prev, one) -> prev + one);
-				prevToken = nextToken;
-			}
+		String txt = Files.readString(Paths.get("texts/" + txtName));
+		m = p.matcher(txt);
+		if(m.find()) {
+			firstToken = m.group();
 		}
-		
-		while ((line = buffer.readLine()) != null) {
-			m = searchToken.matcher(line);
-			if(!m.find()) {
-				continue;
-			}
-			m = searchToken.matcher(line);
-			
-			while(m.find()) {
-				nextToken = m.group();
-				nGram = (prevToken +  nextToken);
-				dict.merge(nGram, 1, (prev, one) -> prev + one);
-				prevToken = nextToken;
-			}
+		while(m.find()) {
+			nextToken = m.group();
+			nGram = (firstToken + nextToken);
+			dict.merge(nGram, 1, (prev, one) -> prev + one);
+			firstToken = nextToken;
 		}
-		buffer.close();
 	}
-	
+		
 	public static HashMap<String, Integer> execution(LinkedList<String> txtList, String regEx) {
 		HashMap<String, Integer> dict = new HashMap<String, Integer>();
 		
 		while(!txtList.isEmpty()) {
 			try {
-				bigrams(txtList, dict, regEx);
+				worker(txtList, dict, regEx);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}	
@@ -86,9 +58,8 @@ public class Bigrams_sequential {
 		}
 		System.out.println("Input txt files: " + txtListMain + "\n");
 	}
-	
-	public static void main(String[] args) {
 
+	public static void main(String[] args) {
 		String regEx = "";
 		if(args.length != 1) {
 			System.out.println("Passare un parametro: \"words\" oppure \"letters\"");
@@ -115,22 +86,21 @@ public class Bigrams_sequential {
 			LinkedList<String> txtList = new LinkedList<String>(txtListMain);
 			//####START EXECUTION TIME #####
 			long startTime = System.nanoTime();
-			HashMap<String, Integer> dict = execution(txtList, regEx);
+			execution(txtList, regEx);
 			
 			long finishTime = System.nanoTime();
 			double elapsedTime = (double) ((finishTime - startTime)/1000000000.0);
 			System.out.println("Sequential elapsed time:: " + elapsedTime + " sec");
 			sumElapsedTime += elapsedTime;
-					
+			
 			/*
 			//Print HasMaps of Bigrams
 	    	for (String name: dict.keySet()){
 	            String key = name;
 	            Integer value = dict.get(name); 
 	            System.out.println(key + " " + value);   
-	        }
-	        */   
-	        
+	        } 
+	        */
 		}
 		System.out.println("MEAN OF TIMES IN " + numIter + " ITERATIONS: " + sumElapsedTime/numIter + " sec"); 
 	}

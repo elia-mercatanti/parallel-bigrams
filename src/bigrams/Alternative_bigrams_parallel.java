@@ -1,3 +1,5 @@
+package bigrams;
+
 import java.io.IOException;
 import java.lang.Thread;
 import java.nio.file.DirectoryStream;
