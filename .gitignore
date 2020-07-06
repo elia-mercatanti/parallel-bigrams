@@ -3,9 +3,6 @@ bin/
 .project
 .classpath
 
-### Files ###
-/slides/
-
 ### LaTex ###
 /report/cvpr.sty
 /report/report.aux
@@ -13,3 +10,11 @@ bin/
 /report/report.out
 /report/report.synctex.gz
 /report/report.tex
+slides/slides.aux
+slides/slides.log
+slides/slides.nav
+slides/slides.out
+slides/slides.snm
+slides/slides.synctex.gz
+slides/slides.tex
+slides/slides.toc
